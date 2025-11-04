@@ -53,17 +53,32 @@ const average = (arr) =>
 const KEY = "ead2c490";
 
 export default function App() {
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const query = "interstellar";
+  const tempQuery = "interstellar";
+
+  // useEffect(() => {
+  //   console.log("After the initial render");
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log("After every render");
+  // });
+
+  // useEffect(() => {
+  //   console.log("D");
+  // }, [query]);
+
+  // console.log("During render"); // Executed first during the render of the component
 
   useEffect(() => {
     async function fetchMovies() {
       try {
         setIsLoading(true);
-
+        setError("");
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
         );
@@ -72,25 +87,29 @@ export default function App() {
         }
 
         const data = await res.json();
-        console.log(data);
         if (data.Response === "False") {
           throw new Error("Movie not found");
+        } else {
+          setMovies(data.Search);
         }
-        setMovies(data.Search);
       } catch (error) {
-        console.error(error.message);
         setError(error.message);
       } finally {
         setIsLoading(false);
       }
     }
+    if (query.length < 3) {
+      setMovies([]);
+      setError("");
+      return;
+    }
     fetchMovies();
-  }, []); // the effect that we specified will only run on mount
+  }, [query]);
 
   return (
     <>
       <NavBar>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
@@ -137,9 +156,7 @@ function Logo() {
     </div>
   );
 }
-function Search() {
-  const [query, setQuery] = useState("");
-
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
