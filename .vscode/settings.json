@@ -1,0 +1,7 @@
+{
+  "files.trimFinalNewlines": false,
+  "diffEditor.codeLens": true,
+  "diffEditor.experimental.showMoves": true,
+  "diffEditor.experimental.useTrueInlineView": true,
+  "diffEditor.hideUnchangedRegions.enabled": true
+}
