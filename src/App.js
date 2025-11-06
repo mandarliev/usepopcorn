@@ -298,8 +298,6 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
-  console.log(title);
-
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId,
@@ -333,9 +331,10 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     }
     document.title = `Movie | ${title}`;
 
-    //  return () => {
-    //    document.title = `usePopcorn`;
-    //  };
+    return () => {
+      document.title = `usePopcorn`;
+      console.log(`Clean up effect for movie ${title}`);
+    };
   }, [title]);
 
   return (
