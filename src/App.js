@@ -298,6 +298,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
+  console.log(title);
+
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId,
@@ -319,12 +321,22 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
         `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
       );
       const data = await res.json();
-      console.log(data);
       setMovie(data);
       setIsLoading(false);
     }
     getMovieDetails();
   }, [selectedId]); // the dependencty will change the prop and hence trigger a re-render and the effect will be executed again
+
+  useEffect(() => {
+    if (!title) {
+      return;
+    }
+    document.title = `Movie | ${title}`;
+
+    //  return () => {
+    //    document.title = `usePopcorn`;
+    //  };
+  }, [title]);
 
   return (
     <div className="details">
