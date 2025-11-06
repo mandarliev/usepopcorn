@@ -113,8 +113,8 @@ export default function App() {
           setError("");
         }
       } catch (error) {
-        console.log(error.message);
         if (error.name !== "AbortError") {
+          console.log(error.message);
           setError(error.message);
         }
       } finally {
@@ -127,6 +127,7 @@ export default function App() {
       setError("");
       return;
     }
+    handleCloseMovie();
     fetchMovies();
 
     return function () {
@@ -323,6 +324,20 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   }
 
   useEffect(() => {
+    function callback(event) {
+      if (event.code === "Escape") {
+        onCloseMovie();
+      }
+    }
+
+    document.addEventListener("keydown", callback);
+    // without a clean up function a new event listener is added to the document
+    return function () {
+      document.removeEventListener("keydown", callback);
+    };
+  }, [onCloseMovie]);
+
+  useEffect(() => {
     async function getMovieDetails() {
       setIsLoading(true);
       const res = await fetch(
@@ -343,7 +358,6 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
     return () => {
       document.title = `usePopcorn`;
-      console.log(`Clean up effect for movie ${title}`);
     };
   }, [title]);
 
