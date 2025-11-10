@@ -249,6 +249,11 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
+  /* eslint-disable */
+  if (imdbRating > 8) {
+    const [isTop, setIsTop] = useState(true);
+  }
+
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId,
